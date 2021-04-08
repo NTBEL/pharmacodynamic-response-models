@@ -1,6 +1,22 @@
-# NumPy
-import numpy as np
+"""Pharmacodynamic response models
 
+Pharmacodynamic response models, including concentration-response,
+inhibitor-response, and various receptor-response models that can be used for
+empirical fitting of response data.
+
+List of Functions:
+    * concentration_response
+    * dose_response
+    * inhibitor_response
+  receptor occupation:
+    * hill_langmuir_equation
+  receptor-response:
+    * hill_equation
+    * clark_equation
+    * operational_model
+    * delcastillo_katz_model
+    * buchwald_threeparameter_model
+"""
 
 def concentration_response(c, emin, emax, ec50, n):
     """Non-linear (sigmoidal) concentration-response equation.
