@@ -3,20 +3,24 @@
 Collection of pharmacodynamic response models, including concentration-response, inhibitor-response, and various receptor-response models that can be used for
 empirical fitting of response data.
 
-## Functions included in this package:
+### Functions:
 
 General response functions:
-    * Concentration-Response
-    * Dose-Response
-    * Inhibitor-Response
+  * Concentration-Response
+  * Dose-Response
+  * Inhibitor-Response
+
 Receptor occupation:
-    * Hill-Langmuir equation
+  * Hill-Langmuir equation
+
 Receptor-response functions:
-    * Hill equation
-    * Clark equation
-    * Operational model by Black and Leff
-    * Del Castillo-Katz model
-    * Three-parameter two-state model by Buchwald 
+  * Hill equation
+  * Clark equation
+  * Operational model by Black and Leff
+  * Del Castillo-Katz model
+  * Three-parameter two-state model by Buchwald
+
+------
 
 # Install
 
