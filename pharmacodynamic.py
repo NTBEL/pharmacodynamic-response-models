@@ -170,6 +170,9 @@ def operational_model(l, emax, kd, tau):
         L + R <--kd--> LR* --tau-> Effect,
     where the agonist ligand's effect is amplified to some extent, which is
     accounted for by the efficacy term tau.
+    Note that the observed/effective dissociation constant and Emax values are:
+        Kobs = kd / (tau + 1)
+        Emax_obs = (emax * tau) / (tau + 1)    
 
     Args:
         l (float, numpy.array): The input concentration of an ligand in
@@ -210,6 +213,9 @@ def delcastillo_katz_model(l, emax, kd, tau):
     is different, the del Castillo-Katz model is functionally identical to the
     Operational model and tau can still be thought of as encoding
     the ligand's efficacy.
+    Note that the observed/effective dissociation constant and Emax values are:
+        Kobs = kd / (tau + 1)
+        Emax_obs = (emax * tau) / (tau + 1)
 
     Args:
         l (float, numpy.array): The input concentration of an ligand in
@@ -248,6 +254,9 @@ def buchwald_threeparameter_model(l, emax, kd, epsilon, gamma):
     del Castillo-Katz model) and gamma encodes amplification of
     the ligand's effect. Note than when epsilon=1 and gamma=1 this model
     reduces to the Clark equation.
+    Note that the observed/effective dissociation constant and Emax values are:
+        Kobs = kd / (epsilon*gamma + 1 - epsilon)
+        Emax_obs = (emax * epsilon * gamma) / (epsilon*gamma + 1 - epsilon)
 
     Args:
         l (float, numpy.array): The input concentration of an ligand in
