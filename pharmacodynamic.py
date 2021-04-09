@@ -24,12 +24,15 @@ def concentration_response(c, emin, emax, ec50, n):
     Args:
         c (float, numpy.array): The input concentration of an effector in
             concentration units.
-        emin (float): The minimimun/baseline response when c=0 in response
-            units.
+        emin (float): The minimimun/baseline response when c=0 in response units.
+            Bounds fot fitting: 0 <= emin <= inf
         emax (float): The maximum resonse in response units.
+            Bounds fot fitting: 0 <= emax <= inf
         ec50 (float): The concentration corresponding to a half-maximal
             response in concentration units.
-        n (int, float): The Hill coefficient (or Hill slope). Typically, n > 0.
+            Bounds fot fitting: 0 <= ec50 <= inf
+        n (int, float): The Hill coefficient (or Hill slope).
+            Bounds for fitting: 0 <= n <= inf
 
     Returns:
         float, numpy.array : The response for the given concentration(s) in
@@ -46,12 +49,15 @@ def dose_response(d, emin, emax, ec50, n):
 
     Args:
         d (float, numpy.array): The input dose in dose units.
-        emin (float): The minimimun/baseline response when d=0 in response
-            units.
+        emin (float): The minimimun/baseline response when d=0 in response units.
+            Bounds fot fitting: 0 <= emin <= inf
         emax (float): The maximum resonse in response units.
+            Bounds fot fitting: 0 <= emax <= inf
         ec50 (float): The dose corresponding to a half-maximal
             response in dose units.
-        n (int, float): The Hill coefficient (or Hill slope). Typically, n > 0.
+            Bounds fot fitting: 0 <= ec50 <= inf
+        n (int, float): The Hill coefficient (or Hill slope).
+            Bounds for fitting: 0 <= n <= inf
 
     Returns:
         float, numpy.array : The response for the given dose(s) in
@@ -72,13 +78,15 @@ def inhibitor_response(ic, emin, emax, ic50, n):
             units.
         emin (float): The minimimun response value to which the respsonse
             can be reduced to by the inhibitor; emin is in response units.
+            Bounds fot fitting: 0 <= emin <= inf
         emax (float): The maximum/baseline resonse when ic=0 in response units.
-        ec50 (float): The inhibitor concentration corresponding to a
+            Bounds fot fitting: 0 <= emax <= inf
+        ic50 (float): The inhibitor concentration corresponding to a
             half-maximal (halway between emax and emin) response in
             concentration units.
-        n (int, float): The Hill coefficient (or Hill slope). n > 0 but
-            gets converted into a negative number so that the Hill coefficient
-            is negative.
+            Bounds fot fitting: 0 <= ic50 <= inf
+        n (int, float): The Hill coefficient (or Hill slope).
+            Bounds for fitting: 0 <= n <= inf
 
     Returns:
         float, numpy.array : The response for the given inhibitor
@@ -93,7 +101,8 @@ def hill_langmuir_equation(l, kd):
         l (float, numpy.array): The input concentration of an ligand in
             concentration units.
         kd (float): The ligand-receptor dissociation constant (or its
-        effective value) in concentration units.
+            effective value) in concentration units.
+                Bounds fot fitting: 0 <= kd <= inf
 
     Returns:
         float, numpy.array : The fractional receptor occupation for the given
@@ -108,9 +117,12 @@ def hill_equation(l, emax, kd, n):
         l (float, numpy.array): The input concentration of an ligand in
             concentration units.
         emax (float): The maximum response in response units.
+            Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant (or its
-        effective value) in concentration units.
-        n (int, float): The Hill coefficient (or Hill slope). Typically, n > 0.
+            effective value) in concentration units.
+            Bounds fot fitting: 0 <= kd <= inf
+        n (int, float): The Hill coefficient (or Hill slope).
+            Bounds for fitting: 0 <= n <= inf
 
     Returns:
         float, numpy.array : The response for the given ligand concentration(s)
@@ -132,8 +144,9 @@ def clark_equation(l, emax, kd):
         l (float, numpy.array): The input concentration of an ligand in
             concentration units.
         emax (float): The maximum response in response units.
+            Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant in concentration
-            units.
+            units. Bounds fot fitting: 0 <= kd <= inf
 
     Returns:
         float, numpy.array : The response for the given ligand concentration(s)
@@ -162,9 +175,12 @@ def operational_model(l, emax, kd, tau):
         l (float, numpy.array): The input concentration of an ligand in
             concentration units.
         emax (float): The maximum response in response units.
+            Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant (or its
-        effective value) in concentration units.
+            effective value) in concentration units.
+            Bounds fot fitting: 0 <= kd <= inf
         tau (float): Efficacy of the agonist ligand.
+            Bounds for fitting: 0 <= tau <= inf
 
     Returns:
         float, numpy.array : The response for the given ligand concentration(s)
@@ -199,9 +215,12 @@ def delcastillo_katz_model(l, emax, kd, tau):
         l (float, numpy.array): The input concentration of an ligand in
             concentration units.
         emax (float): The maximum response in response units.
+            Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant (or its
-        effective value) in concentration units.
+            effective value) in concentration units.
+            Bounds fot fitting: 0 <= kd <= inf
         tau (float): Efficacy of the agonist ligand.
+            Bounds for fitting: 0 <= tau <= inf
 
     Returns:
         float, numpy.array : The response for the given ligand concentration(s)
@@ -234,9 +253,14 @@ def buchwald_threeparameter_model(l, emax, kd, epsilon, gamma):
         l (float, numpy.array): The input concentration of an ligand in
             concentration units.
         emax (float): The maximum response in response units.
+            Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant (or its
-        effective value) in concentration units.
-        tau (float): Efficacy of the agonist ligand.
+            effective value) in concentration units.
+            Bounds fot fitting: 0 <= kd <= inf
+        epsilon (float): Efficacy of the agonist ligand.
+            Bounds fot fitting: 0 <= kd <= 1
+        gamma (float): Amplification of agonist effect.
+            Bounds for fitting: 1 <= gamma <= inf
 
     Returns:
         float, numpy.array : The response for the given ligand concentration(s)
