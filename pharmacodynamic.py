@@ -172,7 +172,7 @@ def operational_model(l, emax, kd, tau):
     accounted for by the efficacy term tau.
     Note that the observed/effective dissociation constant and Emax values are:
         Kobs = kd / (tau + 1)
-        Emax_obs = (emax * tau) / (tau + 1)    
+        Emax_obs = (emax * tau) / (tau + 1)
 
     Args:
         l (float, numpy.array): The input concentration of an ligand in
@@ -283,3 +283,40 @@ def buchwald_threeparameter_model(l, emax, kd, epsilon, gamma):
 
     """
     return emax * epsilon * gamma * l / ((epsilon*gamma + 1 - epsilon) * l + kd)
+
+    def gaddum_equation(l, i, emax, kd, ki):
+        """Gaddum equation for receptor-response with a competitive antagonist.
+
+        The Gaddum equation corresponds to single-state receptor activation model
+        with a linear effect response:
+            L + R <--kd--> LR* ---> Effect,
+        and a competitive antagonist:
+            I + R <--ki--> IR ---X No effect,
+        Note that Effect is directly proportional to the receptor occupation
+        LR* as in the Clark equation.
+
+        Args:
+            l (float, numpy.array): The input concentration of an ligand in
+                concentration units.
+            i (float, numpy.array): The input concentration of the antagonist in
+                concentration units.
+            emax (float): The maximum response in response units.
+                Bounds fot fitting: 0 <= emax <= inf
+            kd (float): The ligand-receptor dissociation constant in concentration
+                units. Bounds fot fitting: 0 <= kd <= inf
+            ki (float): The antagonist-receptor dissociation constant in
+                concentration units. Bounds fot fitting: 0 <= ki <= inf
+
+        Returns:
+            float, numpy.array : The response for the given ligand and antagonist
+                concentration(s) in response units.
+
+        References:
+            1. Gaddum, J.H., 1937. The quantitative effects of antagonistic drugs. J. physiol,
+                89, pp.7P-9P.
+            2. Buchwald, P., 2017. A three‐parameter two‐state model of receptor
+                function that incorporates affinity, efficacy, and signal
+                amplification. Pharmacology research & perspectives, 5(3),
+                p.e00311. https://doi.org/10.1002/prp2.311
+        """
+        return clark_equation(l, emax, kd*(1 + (i/ki)))

@@ -19,6 +19,7 @@ Receptor-response functions:
   * Operational model by Black and Leff
   * Del Castillo-Katz model
   * Three-parameter two-state model by Buchwald
+  * Gaddum equation (competitive antagonist model)
 
 ------
 
