@@ -293,7 +293,8 @@ def gaddum_equation(l, i, emax, kd, ki):
     and a competitive antagonist:
         I + R <--ki--> IR ---X No effect,
     Note that Effect is directly proportional to the receptor occupation
-    LR* as in the Clark equation.
+    LR* as in the Clark equation. Here, the antagonist causing a right-shift
+    in the response function versus agonist curve.
 
     Args:
         l (float, numpy.array): The input concentration of an ligand in
@@ -320,3 +321,43 @@ def gaddum_equation(l, i, emax, kd, ki):
             p.e00311. https://doi.org/10.1002/prp2.311
     """
     return clark_equation(l, emax, kd*(1 + (i/ki)))
+
+def noncompetitive_antagonist(l, i, emax, kd, ki):
+    """Equation for receptor-response with a noncompetitive antagonist.
+
+    This function corresponds to Equation A5 in Buchwald.
+    The model is a single-state receptor activation model
+    with a linear effect response:
+        L + R <--kd--> LR* ---> Effect,
+    and a noncompetitive antagonist:
+        I + R <--ki--> IR ---X No effect,
+        L + IR <--ki--> LIR ---X No effect,
+        I + LR <--ki--> LIR ---X No effect,
+    Note that Effect is directly proportional to the receptor occupation
+    LR* as in the Clark equation. Here, the antagonist leads to a reduction
+    in Emax without causing a right-shift in the response-function versus
+    agonist curve.
+
+    Args:
+        l (float, numpy.array): The input concentration of an ligand in
+            concentration units.
+        i (float, numpy.array): The input concentration of the antagonist in
+            concentration units.
+        emax (float): The maximum response in response units.
+            Bounds fot fitting: 0 <= emax <= inf
+        kd (float): The ligand-receptor dissociation constant in concentration
+            units. Bounds fot fitting: 0 <= kd <= inf
+        ki (float): The antagonist-receptor dissociation constant in
+            concentration units. Bounds fot fitting: 0 <= ki <= inf
+
+    Returns:
+        float, numpy.array : The response for the given ligand and antagonist
+            concentration(s) in response units.
+
+    References:
+        1. Buchwald, P., 2017. A three‐parameter two‐state model of receptor
+            function that incorporates affinity, efficacy, and signal
+            amplification. Pharmacology research & perspectives, 5(3),
+            p.e00311. https://doi.org/10.1002/prp2.311
+    """
+    return clark_equation(l, emax, kd) * (1 / (1 + (i / Ki)))

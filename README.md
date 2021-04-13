@@ -20,6 +20,7 @@ Receptor-response functions:
   * Del Castillo-Katz model
   * Three-parameter two-state model by Buchwald
   * Gaddum equation (competitive antagonist model)
+  * noncompetitive antagonist model (Emax reduction)
 
 ------
 
