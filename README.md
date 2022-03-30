@@ -8,13 +8,13 @@ empirical fitting of response data.
 General response functions:
   * Concentration-Response
   * Dose-Response
-  * Inhibitor-Response
+  * Inhibitor-Response  
 
 Receptor occupation:
   * Hill-Langmuir equation
 
 Receptor-response functions:
-  * Hill equation
+  * Hill equation  
   * Clark equation
   * Operational model by Black and Leff
   * Del Castillo-Katz model
@@ -22,6 +22,8 @@ Receptor-response functions:
   * Gaddum equation (competitive antagonist model)
   * noncompetitive antagonist model (Emax reduction)
 
+ Other response functions:
+  * CNiFERs-Response  
 ------
 
 # Install

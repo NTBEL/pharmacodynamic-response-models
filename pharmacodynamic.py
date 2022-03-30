@@ -16,14 +16,17 @@ List of Functions:
     * operational_model
     * delcastillo_katz_model
     * buchwald_threeparameter_model
+  CNiFERs response:
+    * cnifers_response
 """
 
-def concentration_response(c, emin, emax, ec50, n):
+
+def concentration_response(effector_concentration, emin, emax, ec50, n):
     """Non-linear (sigmoidal) concentration-response equation.
 
     Args:
-        c (float, numpy.array): The input concentration of an effector in
-            concentration units.
+        effector_concentration (float, numpy.array): The input concentration of
+            an effector in concentration units.
         emin (float): The minimimun/baseline response when c=0 in response units.
             Bounds fot fitting: 0 <= emin <= inf
         emax (float): The maximum resonse in response units.
@@ -38,9 +41,10 @@ def concentration_response(c, emin, emax, ec50, n):
         float, numpy.array : The response for the given concentration(s) in
             response units.
     """
-    return emin + (emax-emin) / (1 + (ec50/c)**n)
+    return emin + (emax - emin) / (1 + (ec50 / effector_concentration) ** n)
 
-def dose_response(d, emin, emax, ec50, n):
+
+def dose_response(dose, emin, emax, ec50, n):
     """Non-linear (sigmoidal) dose-response equation.
 
     Note that the dose-response equation is functionally identical to the
@@ -48,7 +52,7 @@ def dose_response(d, emin, emax, ec50, n):
     replaced with a (drug) dose.
 
     Args:
-        d (float, numpy.array): The input dose in dose units.
+        dose (float, numpy.array): The input dose in dose units.
         emin (float): The minimimun/baseline response when d=0 in response units.
             Bounds fot fitting: 0 <= emin <= inf
         emax (float): The maximum resonse in response units.
@@ -63,9 +67,10 @@ def dose_response(d, emin, emax, ec50, n):
         float, numpy.array : The response for the given dose(s) in
             response units.
     """
-    return concentration_response(d, emin, emax, ec50, n)
+    return concentration_response(dose, emin, emax, ec50, n)
 
-def inhibitor_response(ic, emin, emax, ic50, n):
+
+def inhibitor_response(inhibitor_concentration, emin, emax, ic50, n):
     """Non-linear (sigmoidal) inhibitor-response equation.
 
     Note that the inhibitor-response equation is functionally identical to the
@@ -74,8 +79,8 @@ def inhibitor_response(ic, emin, emax, ic50, n):
     coefficient.
 
     Args:
-        ic (float, numpy.array): The inhibitor concentration in concentration
-            units.
+        inhibitor_concentration (float, numpy.array): The inhibitor
+            concentration in concentration units.
         emin (float): The minimimun response value to which the respsonse
             can be reduced to by the inhibitor; emin is in response units.
             Bounds fot fitting: 0 <= emin <= inf
@@ -94,12 +99,13 @@ def inhibitor_response(ic, emin, emax, ic50, n):
     """
     return concentration_response(ic, emin, emax, ic50, -n)
 
-def hill_langmuir_equation(l, kd):
+
+def hill_langmuir_equation(ligand_concentration, kd):
     """Hill-Langmuir receptor occupation equation.
 
     Args:
-        l (float, numpy.array): The input concentration of an ligand in
-            concentration units.
+        ligand_concentration (float, numpy.array): The input concentration of a
+            ligand in concentration units.
         kd (float): The ligand-receptor dissociation constant (or its
             effective value) in concentration units.
                 Bounds fot fitting: 0 <= kd <= inf
@@ -108,14 +114,15 @@ def hill_langmuir_equation(l, kd):
         float, numpy.array : The fractional receptor occupation for the given
             ligand concentration; unitless, range [0,1].
     """
-    return  l / (l + kd)
+    return ligand_concentration / (ligand_concentration + kd)
 
-def hill_equation(l, emax, kd, n):
+
+def hill_equation(ligand_concentration, emax, kd, n):
     """Hill receptor-response equation.
 
     Args:
-        l (float, numpy.array): The input concentration of an ligand in
-            concentration units.
+        ligand_concentration (float, numpy.array): The input concentration of a
+            ligand in   concentration units.
         emax (float): The maximum response in response units.
             Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant (or its
@@ -128,9 +135,10 @@ def hill_equation(l, emax, kd, n):
         float, numpy.array : The response for the given ligand concentration(s)
             in response units.
     """
-    return emax * l**n / (l**n + kd**n)
+    return emax * ligand_concentration ** n / (ligand_concentration ** n + kd ** n)
 
-def clark_equation(l, emax, kd):
+
+def clark_equation(ligand_concentration, emax, kd):
     """Clark equation for receptor-response.
 
     The Clark equation corresponds to single-state receptor activation model
@@ -141,8 +149,8 @@ def clark_equation(l, emax, kd):
     equation with n = 1.
 
     Args:
-        l (float, numpy.array): The input concentration of an ligand in
-            concentration units.
+        ligand_concentration (float, numpy.array): The input concentration of a
+            ligand in concentration units.
         emax (float): The maximum response in response units.
             Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant in concentration
@@ -161,9 +169,10 @@ def clark_equation(l, emax, kd):
             amplification. Pharmacology research & perspectives, 5(3),
             p.e00311. https://doi.org/10.1002/prp2.311
     """
-    return emax * l / (l + kd)
+    return emax * ligand_concentration / (ligand_concentration + kd)
 
-def operational_model(l, emax, kd, tau):
+
+def operational_model(ligand_concentration, emax, kd, tau):
     """Operational (Black-Leff) model of receptor-response.
     The operational model corresponds to single-state receptor activation model
     with a (non-linear) hyperbolic effect response:
@@ -175,8 +184,8 @@ def operational_model(l, emax, kd, tau):
         Emax_obs = (emax * tau) / (tau + 1)
 
     Args:
-        l (float, numpy.array): The input concentration of an ligand in
-            concentration units.
+        ligand_concentration (float, numpy.array): The input concentration of a
+            ligand in concentration units.
         emax (float): The maximum response in response units.
             Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant (or its
@@ -199,9 +208,10 @@ def operational_model(l, emax, kd, tau):
             amplification. Pharmacology research & perspectives, 5(3),
             p.e00311. https://doi.org/10.1002/prp2.311
     """
-    return emax * tau * l / ((tau + 1) * l + kd)
+    return emax * tau * ligand_concentration / ((tau + 1) * ligand_concentration + kd)
 
-def delcastillo_katz_model(l, emax, kd, tau):
+
+def delcastillo_katz_model(ligand_concentration, emax, kd, tau):
     """Del Castillo-Katz model of receptor-response.
     The Del Castillo-Katz model corresponds to a two-state receptor activation
     model with a linear effect response:
@@ -218,8 +228,8 @@ def delcastillo_katz_model(l, emax, kd, tau):
         Emax_obs = (emax * tau) / (tau + 1)
 
     Args:
-        l (float, numpy.array): The input concentration of an ligand in
-            concentration units.
+        ligand_concentration (float, numpy.array): The input concentration of a
+            ligand in concentration units.
         emax (float): The maximum response in response units.
             Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant (or its
@@ -242,9 +252,10 @@ def delcastillo_katz_model(l, emax, kd, tau):
             amplification. Pharmacology research & perspectives, 5(3),
             p.e00311. https://doi.org/10.1002/prp2.311
     """
-    return emax * tau * l / ((tau + 1) * l + kd)
+    return emax * tau * ligand_concentration / ((tau + 1) * ligand_concentration + kd)
 
-def buchwald_threeparameter_model(l, emax, kd, epsilon, gamma):
+
+def buchwald_threeparameter_model(ligand_concentration, emax, kd, epsilon, gamma):
     """Three-parameter two-state model of receptor-response by Buchwald.
     The three-parameter two-state model of receptor-response by Buchwald
     corresponds to a two-state receptor activation model that allows for
@@ -259,8 +270,8 @@ def buchwald_threeparameter_model(l, emax, kd, epsilon, gamma):
         Emax_obs = (emax * epsilon * gamma) / (epsilon*gamma + 1 - epsilon)
 
     Args:
-        l (float, numpy.array): The input concentration of an ligand in
-            concentration units.
+        ligand_concentration (float, numpy.array): The input concentration of an
+            ligand in concentration units.
         emax (float): The maximum response in response units.
             Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant (or its
@@ -282,9 +293,16 @@ def buchwald_threeparameter_model(l, emax, kd, epsilon, gamma):
             p.e00311. https://doi.org/10.1002/prp2.311
 
     """
-    return emax * epsilon * gamma * l / ((epsilon*gamma + 1 - epsilon) * l + kd)
+    return (
+        emax
+        * epsilon
+        * gamma
+        * ligand_concentration
+        / ((epsilon * gamma + 1 - epsilon) * ligand_concentration + kd)
+    )
 
-def gaddum_equation(l, i, emax, kd, ki):
+
+def gaddum_equation(ligand_concentration, antagonist_concentration, emax, kd, ki):
     """Gaddum equation for receptor-response with a competitive antagonist.
 
     The Gaddum equation corresponds to single-state receptor activation model
@@ -297,10 +315,10 @@ def gaddum_equation(l, i, emax, kd, ki):
     in the response function versus agonist curve.
 
     Args:
-        l (float, numpy.array): The input concentration of an ligand in
-            concentration units.
-        i (float, numpy.array): The input concentration of the antagonist in
-            concentration units.
+        ligand_concentration (float, numpy.array): The input concentration of an
+            ligand in concentration units.
+        antagonist_concentration (float, numpy.array): The input concentration
+            of the antagonist in concentration units.
         emax (float): The maximum response in response units.
             Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant in concentration
@@ -313,16 +331,21 @@ def gaddum_equation(l, i, emax, kd, ki):
             concentration(s) in response units.
 
     References:
-        1. Gaddum, J.H., 1937. The quantitative effects of antagonistic drugs. J. physiol,
-            89, pp.7P-9P.
+        1. Gaddum, J.H., 1937. The quantitative effects of antagonistic drugs.
+            J. physiol, 89, pp.7P-9P.
         2. Buchwald, P., 2017. A three‐parameter two‐state model of receptor
             function that incorporates affinity, efficacy, and signal
             amplification. Pharmacology research & perspectives, 5(3),
             p.e00311. https://doi.org/10.1002/prp2.311
     """
-    return clark_equation(l, emax, kd*(1 + (i/ki)))
+    return clark_equation(
+        ligand_concentration, emax, kd * (1 + (antagonist_concentration / ki))
+    )
 
-def noncompetitive_antagonist(l, i, emax, kd, ki):
+
+def noncompetitive_antagonist(
+    ligand_concentration, antagonist_concentration, emax, kd, ki
+):
     """Equation for receptor-response with a noncompetitive antagonist.
 
     This function corresponds to Equation A5 in Buchwald.
@@ -339,10 +362,10 @@ def noncompetitive_antagonist(l, i, emax, kd, ki):
     agonist curve.
 
     Args:
-        l (float, numpy.array): The input concentration of an ligand in
-            concentration units.
-        i (float, numpy.array): The input concentration of the antagonist in
-            concentration units.
+        ligand_concentration (float, numpy.array): The input concentration of a
+            ligand in concentration units.
+        antagonist_concentration (float, numpy.array): The input concentration
+            of the antagonist in concentration units.
         emax (float): The maximum response in response units.
             Bounds fot fitting: 0 <= emax <= inf
         kd (float): The ligand-receptor dissociation constant in concentration
@@ -360,4 +383,38 @@ def noncompetitive_antagonist(l, i, emax, kd, ki):
             amplification. Pharmacology research & perspectives, 5(3),
             p.e00311. https://doi.org/10.1002/prp2.311
     """
-    return clark_equation(l, emax, kd) * (1 / (1 + (i / Ki)))
+    return clark_equation(ligand_concentration, emax, kd) * (
+        1 / (1 + (antagonist_concentration / Ki))
+    )
+
+
+def cnifers_response(agonist_concentration, fret_ratio_max, ec50, n):
+    """Hill-type response equation for CNiFERs FRET response to an agonist.
+
+    Args:
+        agonist_concentration (float, numpy.array): The input concentration of
+            an agonist in concentration units.
+        fret_ratio_max (float): The maximum FRET ratio of the resonse.
+            Bounds fot fitting: 0 <= fret_ratio_max <= inf
+        ec50 (float): The concentration corresponding to a half-maximal
+            response in concentration units.
+            Bounds fot fitting: 0 <= ec50 <= inf
+        n (int, float): The Hill coefficient (or Hill slope).
+            Bounds for fitting: 0 <= n <= inf
+
+    Returns:
+        float, numpy.array : The FRET ratio response for the given
+            agonist concentration(s).
+
+    References:
+        1. Lacin, E., Muller, A., Fernando, M., Kleinfeld, D. and Slesinger,
+            P.A., 2016. Construction of cell-based neurotransmitter fluorescent
+            engineered reporters (CNiFERs) for optical detection of
+            neurotransmitters in vivo. JoVE (Journal of Visualized Experiments),
+            (111), p.e53290. https://dx.doi.org/10.3791/53290
+    """
+
+    fret_ratio = concentration_response(
+        agonist_concentration, emin=0.0, emax=fret_ratio_max, ec50=ec50, n=n
+    )
+    return fret_ratio
